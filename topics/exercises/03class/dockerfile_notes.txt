@@ -1,0 +1,29 @@
+FROM golang:1.14rc1-buster
+COPY bin/ /
+RUN chmod 544 /app/app1.bin && \
+    chmod 500 /var/logs/* 
+CMD [ "/app/app1.bin", "run" ]
+
+
+CMDS:
+
+FROM
+	The base image that will be used to build the new image
+COPY
+	Copy files between the local filesystem to the container file system
+ADD
+	Similar to the COPY instruction, but it can be used to copy directly from a remote URL(http or https)
+RUN
+	Execute a command into the container. The binary that will be executed must reside inside the container
+ENV
+	Creates an Environment Variable in the container
+EXPOSE
+	Expose a TCP or UDP port to inform Docker that the container will listen on the specified ports
+USER
+	Specify which user account will be used to run the commands inside the container when it runs
+CMD
+	Set a default command and default parameters which will be executed when Docker is run. Those values can be overwritten during the container execution
+ENTRYPOINT
+	Used when the container needs to be run as an executable.
+WORKDIR
+	Sets the working directory to run the instructions: RUN, CMD, ENTRYPOINT, COPY and ADD

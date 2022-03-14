@@ -1,0 +1,20 @@
+docker-compose commands go in DOCKER-COMPOSE.yml
+compose is an orchestration tool used to run multiple containers at once 
+e.g. an entire app structure.
+Is also often used in CI pipelines to run a series of tests on all the app components and make sure they all talk together properly
+
+DOCKER-COMPOSE.yml example:
+
+version: '3'
+services:
+  web: 							#friendly name for service
+    build: . 					#the Dockerfile is in local dir
+    ports:						#ports to open host:container
+      - "5000:5000"
+  redis: 						#friendlyname
+    image: "redis:alpine"		#image name (remote)
+	
+	
+CMD: docker-compose up -d 
+Will create the above containers, as well as a local network for them to talk to each other, and 
+some custom DNS resolution so they can talk to each other using their service names

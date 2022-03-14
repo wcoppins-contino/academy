@@ -1,0 +1,7 @@
+docker build -t exercise02:v1 -f ./Dockerfile.v1 .
+docker run -d -p 8080:80 -it exercise02:v1
+
+docker build -t exercise02:v2 -f ./Dockerfile.v2 .
+docker run -d -p 8080:80 --mount type=bind,source="c/Users/willc/Desktop/Pathways Dojo/03class/c03-docker02/www/",target="/usr/local/apache2/htdocs" -it exercise02:v2
+
+*Changes made to index.html reflected in localhost:8080

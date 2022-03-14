@@ -1,0 +1,3 @@
+docker build -f ./Dockerfile -t hello-name:v1 .
+
+docker run -e name=Will -it hello-name:v1

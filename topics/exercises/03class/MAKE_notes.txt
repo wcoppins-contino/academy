@@ -1,0 +1,94 @@
+MAKE and the MAKEfile
+
+MAKE is a tool to execute a series of commands (colloquially, a recipe) based on targets in a specific file.
+Commonly used to compile and build apps from src code. Used a lot for scripts/automation
+
+An amazing part of make is the ability to run platform/shell independant, as opposed to bash scripts not working in zsh, for example. Powershell vs batch, etc. 
+Like any programming language, as long as MAKE is installed, it uses the same syntax and language everywhere. 
+
+MAKEFILE:
+Contains the targets and instructions that will be used when MAKE is invokved. Contains vars, conditions, loops, all the good shit
+
+<<target>>: <<prereqs>>
+	<<instructions>>
+	
+e.g.
+
+echo_HelloWorld:
+	@echo "Hello World"
+
+>> make echo_HelloWorld
+>> make (on its own will run the default/first target in a makefile)
+		Default target is the first, or whatever is defined by ".DEFAULT_GOAL := <<target>>"
+		For instance, in the below it will run alpha but nothing else:
+		
+Alpha:
+	@echo "A"
+Beta:
+	@echo "B"
+Gamma:
+	@echo "C"
+	
+A neat trick is to get ">> MAKE" to run everything, but specifying that the first target is a target that calls all other targets.
+e.g.
+
+all: alpha beta gamma
+
+Often, targets are binary files! What if you had a binary file called "echo_HelloWorld" but wanted that to just be a function name? What if there is no file - Is MAKE wasting time looking for that file before executing? YES.
+To avoid this, declare .PHONY <<target1>> ... <target n>>. This forces MAKE to assume it is a friendly name for a target, not an actual file location on disk, which is what you want.
+
+e.g.
+
+.PHONY echo_HelloWorld echo_otherTarget echo_anotherTarget
+...
+	echo_HelloWorld:
+		@echo "HelloWorld" 
+	
+	
+-----------------------------------------------------------
+MULTITARGET
+
+.PHONY: all create_file write_to_file remove_file		# these 3 target names are names, not files!
+.DEFAULT_GOAL := create_file
+all: create_file write_to_file remove_file
+
+create_file:
+	@echo "Creatin file"
+	@touch output.txt
+	@ls -l output.txt
+	
+write_to_file: create_file
+	echo "Writing file contents" > output.txt
+	
+remove_file: create_file
+	@echo "Removin file"
+	@rm -rf output.txt
+	
+---------------------------------------------------------
+
+VARS:
+<<varname>> ?= <<value>>
+
+At Runtime:
+>> FILE=output.txt make all
+>> FILE=somerandomFile.txt make create_file 
+
+Using variables:
+
+.PHONY: all create_file write_to_file remove_file		# these 3 target names are names, not files!
+.DEFAULT_GOAL := create_file
+FILE ?= output.txt
+all: create_file write_to_file remove_file # This is a kinda useless result but does do everything
+
+create_file:
+	@echo "Creatin file"
+	@touch ${FILE}
+	@ls -l ${FILE}
+	
+write_to_file: create_file
+	echo "Writing file contents" > ${FILE}
+	
+remove_file: create_file
+	@echo "Removin file"
+	@rm -rf ${FILE}
+	

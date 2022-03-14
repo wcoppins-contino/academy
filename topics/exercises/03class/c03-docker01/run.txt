@@ -1,0 +1,2 @@
+docker build -f ./Dockerfile -t da-terraform:c03-docker-01 .
+docker run -it da-terraform:c03-docker-01
